@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table border="1">
+      <!-- Bovenste label met studenten. -->
+      <thead>
+        <th>Combinatie</th>
+        {%for student1 in matrix.keys()%}
+        <th>{{student1}}</th>
+        {%endfor%}
+      </thead>
+      <!-- Zij tabel met studenten + opmerkingen -->
+      <tbody>
+        <!-- Loopen door de matrix atiems. -->
+        {%for student1, opmerkingen in matrix.items()%}
+        <tr>
+          <td>{{student1}}</td>
+          <!-- Kijken of de studenten overeen komen met elkaar zo ja / in deze colom -->
+          {%for student2 in matrix.keys()%} {%if student1 == student2%}
+          <td>/</td>
+          {%else%}
+          <td>
+            <!-- Loopen door opmerkingen -->
+            {% if opmerkingen[student2] %} {% for comment in
+            opmerkingen[student2] %} {{comment}} {%endfor%} {%else%} / {%endif%}
+          </td>
+          {%endif%} {%endfor%}
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </body>
+</html>
