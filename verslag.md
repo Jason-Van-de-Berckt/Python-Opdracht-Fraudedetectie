@@ -12,3 +12,9 @@ Voor de table in de template.html file heb ik een website gebruikt om de table t
 Ik heb de tabel kunnen maken alleen kreeg ik de opmerkingen niet in de tabel maar kreeg ik overal /. Wat wilt zeggen dat er geen commentaar is of de studenten overeen komen met elkaar.
 
 Ik heb mijn code laten nakijken door een medestudent voor feedback en had bij een forloop de foute student gebruikt.
+
+# 1. Implementatie stap 2
+
+## 2. Anonimiseren
+
+We gaan hier tewerk met mapping. We maken een dictionary met daarim een studenten alias. Ik heb gekozen voor student 1 tot 3 als key te grbuiken. Voor het nog kunnen bekijken van de auteursnamen voegen we de naam van de student in al value.
