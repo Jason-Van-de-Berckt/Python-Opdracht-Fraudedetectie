@@ -13,8 +13,18 @@ Ik heb de tabel kunnen maken alleen kreeg ik de opmerkingen niet in de tabel maa
 
 Ik heb mijn code laten nakijken door een medestudent voor feedback en had bij een forloop de foute student gebruikt.
 
-# 1. Implementatie stap 2
+# 2. Implementatie stap 2
 
 ## 2. Anonimiseren
 
 We gaan hier tewerk met mapping. We maken een dictionary met daarim een studenten alias. Ik heb gekozen voor student 1 tot 3 als key te grbuiken. Voor het nog kunnen bekijken van de auteursnamen voegen we de naam van de student in al value.
+
+# 3. Implementatie stap 3
+
+## Identieke inhoud
+
+Het vergelijken van innerlijke inhoud van de .py bestanden voor het testen op fraude.
+
+### Moeilijkheden
+
+Ik heb het hier wel even moeilijk gehad, omdat ik niet met functies werk. Ik heb ook moeten uitzoeken hoe je het innerlijke bestand leest en wegschrijft in een disctionary. Dit heb ik gedaan door de documentatie van pathlib te lezen en uit te proberen. Ik heb ook moeten uitzoeken hoe ik de studenten annoniem weergeef in het html bestand. Omdat we eerst met hardcoded waardes aan het werken waren.
