@@ -1,5 +1,6 @@
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pathlib import Path
+import re
 
 # We vragen een diractory path op om hier na te gaan naar fraude.
 directory = input("Geef het pad van de folder in: ")
@@ -25,9 +26,10 @@ if path.is_dir():
             if pyfiles:
                 for pyfile in pyfiles:
                     #print(pyfile.name)
-                    bestand = pyfile.read_text()
+                    innerbestand = pyfile.read_text()
                     #print(bestand)
-                    filedict[file.name] = bestand
+                    commentaar = re.findall(r"\#.*", innerbestand)
+                    filedict[file.name] = [innerbestand, commentaar]
             else:
                 print("geen py file gevonden.")
     else:
@@ -60,9 +62,17 @@ print(f"matrix: {matrix}")
 # Toevoegen van commentaren.
 for student1, content1 in anoniem_filedict.items():
     for student2, content2 in anoniem_filedict.items():
-        if student1 != student2:
-            if content1 == content2:
-                matrix[student1][student2].append("identieke file opdracht.py")
+        if student1 < student2:
+            if student1 != student2:
+                if content1[0] == content2[0]:
+                    print(student1,content1[0], student2, content2[0])
+                    matrix[student1][student2].append("identieke file opdracht.py")
+                if content1[1] == content2[1]:
+                    print(student1, content1[1], student2, content2[1])
+                    matrix[student1][student2].append("identieke commentaar")
+
+print(matrix)
+
 output = template.render(matrix=matrix)
 
 # print de output naar een html bestand.
