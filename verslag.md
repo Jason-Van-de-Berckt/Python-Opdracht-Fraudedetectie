@@ -24,4 +24,4 @@ Ik heb het hier wel even moeilijk gehad, omdat ik niet met functies werk. Ik heb
 
 Het vergelijken van identieke commmands heb ik als volg uitgevoerd. Ik heb met de re library gezocht in de .py documentjes naar een # en hier de gehele string van genomen. Dit onderdeel is mij eigenlijk goed afgegaan doordat ik de aangewezen website van de documentatie gebruikt heb.
 
-Het loggen naar het html bestandje is wat minder soepeler gelopen met de rede dat ik elke student met elkaar twee keer vergeleek. Dit is niet de bedoeling en heb zo mijn code moeten aanpassen zodat dit niet gebeurde. Hoe ik dit heb gevonden is door de output te loggen naar een txt bestandje met ´´´ py \*.py > test.txt ´´´ en hier de output goed te bekijken en te debuggen.
+Het loggen naar het html bestandje is wat minder soepeler gelopen met de rede dat ik elke student met elkaar twee keer vergeleek. Dit is niet de bedoeling en heb zo mijn code moeten aanpassen zodat dit niet gebeurde. Hoe ik dit heb gevonden is door de output te loggen naar een txt bestandje met py \*.py > test.txt en hier de output goed te bekijken en te debuggen.
