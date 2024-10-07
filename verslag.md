@@ -47,3 +47,20 @@ for student1, content1 in anoniem_filedict.items():
 ```
 
 Nadien ben ik erachter gekomen dat ik deze stap moest uitvoeren bij het zoeken naar de commentaar waardoor het gemaakelijker was om dit te implementeren. Verder heb ik ook eens gekeken daar de documentatie over dit deel. Hierdoor werdt ook veel duidelijk.
+
+# 6. Implementatie stap 6
+
+## Spelchecker toevoegen
+
+Bij de oefeningen was het al meteen duidelijk wat mij te doen stond. Echter was het niet zo simpel. Nadat ik fouten had gemaakt in mijn visitor klassen en dit nagevraagd te hebben aan een medestudent. Is dit onderdeel redelijk snel en goed gelukt. Ik had een fout gemaakt bij de naamging van visit_SimpleString. Dit had ik een eigen naamgeving gegeven waardoor het niet werkte ook had ik in het begin geen node ingesteld dit moest cst.simplestring zijn. voordat ik kon vergelijken moest ik de sting stippen op backslaches en ('). Dit had ik eerst ook niet door waardoor het niet werkte. Nadien kwam ik op deze classe uit.
+
+```python
+class LexionCollector(cst.CSTVisitor):
+    def __init__(self):
+        self.strings = []
+
+    def visit_SimpleString(self, node: cst.SimpleString):
+        string_value = node.value.strip("\"'")
+        self.strings.append(string_value)
+
+```

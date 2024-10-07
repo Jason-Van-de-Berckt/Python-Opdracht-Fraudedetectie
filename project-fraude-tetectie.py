@@ -1,6 +1,7 @@
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pathlib import Path
 import libcst as cst
+from spellchecker import SpellChecker
 
 
 class CommentCollector(cst.CSTVisitor):
@@ -9,6 +10,14 @@ class CommentCollector(cst.CSTVisitor):
     
     def visit_Comment(self, node: cst.Comment):
         self.comments.append(node.value)
+
+class LexionCollector(cst.CSTVisitor):
+    def __init__(self):
+        self.strings = []
+
+    def visit_SimpleString(self, node: cst.SimpleString):
+        string_value = node.value.strip("\"'")
+        self.strings.append(string_value)
 
 # We vragen een diractory path op om hier na te gaan naar fraude.
 directory = input("Geef het pad van de folder in: ")
@@ -36,11 +45,26 @@ if path.is_dir():
                     innerbestand = pyfile.read_text()
                     # inhoud van innerbestand parsen.
                     content = cst.parse_module(innerbestand)
+
                     # Innderbestanden zoeken naar commentaar
                     commentVisitor = CommentCollector()
                     content.visit(commentVisitor)
+
+                    # Innerbestanden zoeken naar spelfouten in Strings
+                    stringVisitor = LexionCollector()
+                    content.visit(stringVisitor)
+                    spelfouten = []
+
+                    spel = SpellChecker(language='nl')
+                    for strings in stringVisitor.strings:
+                        woorden = strings.split()
+                        for woord in woorden:
+                            if spel.unknown([woord]):
+                                spelfouten.append(woord)
+                                print(f"spelfouten {spelfouten}")
+
                     # Alle uitkomsten in een dictionarie zetten voor te kunnen vergelijken
-                    filedict[file.name] = [innerbestand, commentVisitor.comments]
+                    filedict[file.name] = [innerbestand, commentVisitor.comments, spelfouten]
             else:
                 print("geen py file gevonden.")
     else:
@@ -75,6 +99,10 @@ for student1, content1 in anoniem_filedict.items():
                 if content1[1] == content2[1]:
                     print(student1, content1[1], student2, content2[1])
                     matrix[student1][student2].append("identieke commentaar")
+                if content1[2] and content2[2]:
+                    if content1[2] == content2[2]:
+                        print(student1, content1[2], student2, content2[2])
+                        matrix[student1][student2].append(f"Identieke spelfout: {content2[2]}")
 
 print(matrix)
 
