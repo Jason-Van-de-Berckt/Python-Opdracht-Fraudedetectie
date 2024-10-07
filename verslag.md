@@ -25,3 +25,25 @@ Ik heb het hier wel even moeilijk gehad, omdat ik niet met functies werk. Ik heb
 Het vergelijken van identieke commmands heb ik als volg uitgevoerd. Ik heb met de re library gezocht in de .py documentjes naar een # en hier de gehele string van genomen. Dit onderdeel is mij eigenlijk goed afgegaan doordat ik de aangewezen website van de documentatie gebruikt heb.
 
 Het loggen naar het html bestandje is wat minder soepeler gelopen met de rede dat ik elke student met elkaar twee keer vergeleek. Dit is niet de bedoeling en heb zo mijn code moeten aanpassen zodat dit niet gebeurde. Hoe ik dit heb gevonden is door de output te loggen naar een txt bestandje met py \*.py > test.txt en hier de output goed te bekijken en te debuggen.
+
+# 5. Impementatie stap 5
+
+## Comments zoeken met dmv syntax boom
+
+Ik heb hier redelijk veel mee gevochten, omdat mijn code zelf rommelig was. Ik heb dan eerst mijn code zelf uitgezocht en commentaar bijgeschreven. Eerst dacht ik dat ik bij de volgende code met de visitor moest werken maar dit gedeete was voor te vergelijken.
+
+```python
+for student1, content1 in anoniem_filedict.items():
+    for student2, content2 in anoniem_filedict.items():
+        if student1 < student2: # Zorgt ervoor dat we de studenten niet meerdere keren nakijken
+            if student1 != student2:
+                if content1[0] == content2[0]:
+                    print(student1,content1[0], student2, content2[0])
+                    matrix[student1][student2].append("identieke file opdracht.py")
+                if content1[1] == content2[1]:
+                    print(student1, content1[1], student2, content2[1])
+                    matrix[student1][student2].append("identieke commentaar")
+
+```
+
+Nadien ben ik erachter gekomen dat ik deze stap moest uitvoeren bij het zoeken naar de commentaar waardoor het gemaakelijker was om dit te implementeren. Verder heb ik ook eens gekeken daar de documentatie over dit deel. Hierdoor werdt ook veel duidelijk.
