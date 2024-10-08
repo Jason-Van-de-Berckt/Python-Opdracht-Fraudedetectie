@@ -64,3 +64,32 @@ class LexionCollector(cst.CSTVisitor):
         self.strings.append(string_value)
 
 ```
+
+# 7. Implematie stap 7
+
+## Code vergelijken zonder commentaar
+
+Eerst was het nog niet goed duidelijk hoe ik hieraan moest beginnen. Nadat ik mijn code nog eens goed had nagekeken en begreep wist ik hoe. Ik moest een classe aanmaken die ervoor zorgt dat als ik content visit de commentaar uit deze content werd gefilterd. Nadien bleek dat ik een foutje had gemaakt in mijn classe:
+
+```python
+class CommentTransformer(cst.CSTTransformer):
+    def leave_Comment(self, original_node, updated_node):
+        return None
+```
+
+Dit moest eerder deze code zijn:
+
+```python
+class CommentTransformer(cst.CSTTransformer):
+    def leave_Comment(self, original_node, updated_node):
+        return cst.RemoveFromParent()
+```
+
+Eerst returnde ik niets waardoor er niets uit kwam. Later gezien kwam er zeker iets uit, maar nog niet het juisten.
+Ik moest de code van de uitkomst in een variabele zetten omdat het niet als een string uit de Transformer kwam. dit heb ik gedaan met:
+
+```python
+stripped_code = new_tree.code.strip("\n")
+```
+
+Ik heb ook ineens "\n" uit de string gehaald als deze hier in zat, zodat we alles goed kunnen vergelijken.

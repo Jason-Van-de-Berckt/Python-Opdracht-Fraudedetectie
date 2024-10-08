@@ -7,9 +7,10 @@ from spellchecker import SpellChecker
 class CommentCollector(cst.CSTVisitor):
     def __init__(self):
         self.comments = []
-    
+
     def visit_Comment(self, node: cst.Comment):
         self.comments.append(node.value)
+
 
 class LexionCollector(cst.CSTVisitor):
     def __init__(self):
@@ -18,6 +19,12 @@ class LexionCollector(cst.CSTVisitor):
     def visit_SimpleString(self, node: cst.SimpleString):
         string_value = node.value.strip("\"'")
         self.strings.append(string_value)
+
+
+class CommentTransformer(cst.CSTTransformer):
+    def leave_Comment(self, original_node, updated_node):
+        return cst.RemoveFromParent()
+
 
 # We vragen een diractory path op om hier na te gaan naar fraude.
 directory = input("Geef het pad van de folder in: ")
@@ -51,11 +58,13 @@ if path.is_dir():
                     content.visit(commentVisitor)
 
                     # Innerbestanden zoeken naar spelfouten in Strings
+                    # Innit
                     stringVisitor = LexionCollector()
                     content.visit(stringVisitor)
                     spelfouten = []
 
-                    spel = SpellChecker(language='nl')
+                    # Eigelijke code
+                    spel = SpellChecker(language="nl")
                     for strings in stringVisitor.strings:
                         woorden = strings.split()
                         for woord in woorden:
@@ -63,8 +72,19 @@ if path.is_dir():
                                 spelfouten.append(woord)
                                 print(f"spelfouten {spelfouten}")
 
+                    # Commments uit syntaxboom filteren
+                    transformer = CommentTransformer()
+                    new_tree = content.visit(transformer)
+                    # omzetten van tree naar een string om te kunnen vergelijken.
+                    stripped_code = new_tree.code.strip("\n")
+                    print(f"Striped code {stripped_code}")
+
                     # Alle uitkomsten in een dictionarie zetten voor te kunnen vergelijken
-                    filedict[file.name] = [innerbestand, commentVisitor.comments, spelfouten]
+                    filedict[file.name] = [
+                        stripped_code,  # Code zonder commentaren
+                        commentVisitor.comments,  # Alleen de commands
+                        spelfouten,  # Spelfouten in commentaar en strings
+                    ]
             else:
                 print("geen py file gevonden.")
     else:
@@ -78,7 +98,10 @@ print(auteursnamen)
 
 # Studenten een alias geven zodat ze anoniem zijn.
 anoniemen = {f"Student {i+1}": student for i, student in enumerate(filedict.keys())}
-anoniem_filedict = {anoniem: filedict[originele_student] for anoniem, originele_student in anoniemen.items()}
+anoniem_filedict = {
+    anoniem: filedict[originele_student]
+    for anoniem, originele_student in anoniemen.items()
+}
 
 
 # Hier maken we een matrix voor het vergelijken van de studenten.
@@ -91,18 +114,23 @@ print(f"matrix: {matrix}")
 # Vergelijken van studenten en toevoegen van commentaren.
 for student1, content1 in anoniem_filedict.items():
     for student2, content2 in anoniem_filedict.items():
-        if student1 < student2: # Zorgt ervoor dat we de studenten niet meerdere keren nakijken
+        if (
+            student1 < student2
+        ):  # Zorgt ervoor dat we de studenten niet meerdere keren nakijken
             if student1 != student2:
                 if content1[0] == content2[0]:
-                    print(student1,content1[0], student2, content2[0])
-                    matrix[student1][student2].append("identieke file opdracht.py")
+                    print(student1, content1[0], student2, content2[0])
+                    matrix[student1][student2].append("identieke Code")
+                    print(f"striped_code{content1[0]}")
                 if content1[1] == content2[1]:
                     print(student1, content1[1], student2, content2[1])
                     matrix[student1][student2].append("identieke commentaar")
                 if content1[2] and content2[2]:
                     if content1[2] == content2[2]:
                         print(student1, content1[2], student2, content2[2])
-                        matrix[student1][student2].append(f"Identieke spelfout: {content2[2]}")
+                        matrix[student1][student2].append(
+                            f"Identieke spelfout: {content2[2]}"
+                        )
 
 print(matrix)
 
