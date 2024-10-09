@@ -1,4 +1,1 @@
-jinja2
-pathlib
-libcst
-pyspellchecker
+jinja2 libcst pyspellchecker

@@ -93,3 +93,28 @@ stripped_code = new_tree.code.strip("\n")
 ```
 
 Ik heb ook ineens "\n" uit de string gehaald als deze hier in zat, zodat we alles goed kunnen vergelijken.
+
+# 8. Implematie stap 8
+
+## Meerder bestanden vergelijken met elkaar:
+
+Deze stap was niet zo moeilijk. Ik moest wat aanpassen aan hoe ik de data van de bestanden in een lijst zette. Ik moetst een andere lijst aanmaken waarin ik alle data zette per py file. Deze lijst zit dus vol met py files [file1, file2, ...] Hierna moest ik de vergelijking aanpassen. Eerst werkte ik met content[index], omdat alle content in een lijst zat. bv content[0] --> de code zonder commentaar. Ik heb dit dan moeten aanpassen naar het volgende:
+
+```python
+if len(content1) != len(content2): # We kijken hier na of er evenveel py files per student geupload zijn. als dit niet is geven we een error code.
+    matrix[student1][student2].append("Vergelijking niet mogelijk: geen geleik aantal py files")
+
+else: #Vergelijken van de bestanden als er wel genoeg bestanden zijn.
+    for(code1, comments1, spelfouten1), (code2, comments2, spelfouten2) in zip(content1, content2):
+        if code1 == code2:
+            matrix[student1][student2].append("identieke Code")
+        if comments1 == comments2:
+            matrix[student1][student2].append("identieke commentaar")
+        if spelfouten1 and spelfouten2:
+            if spelfouten1 == spelfouten2:
+                matrix[student1][student2].append(
+                    f"Identieke spelfout: {spelfouten1}"
+                )
+```
+
+Eerst kijken of er wel evenveel py files zijn per student. Als dit niet zo is geven we een message mee in de matrix dat de vergelijking niet mogelijk is. Stel er zijn wel evenveel pyfiles. Dan gaan we door de lijst caan en vergelijken met de andere lijst die in content zit. Hier heb ik wel even over moeten nadenken, omdat ik de vorige code simpel en duidelijk vond. Na dit geïmplementeerd te hebben is het wel weer duidelijk hoe het werkt.

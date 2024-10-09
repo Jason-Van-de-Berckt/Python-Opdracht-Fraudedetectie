@@ -26,8 +26,13 @@
           {%else%}
           <td>
             <!-- Loopen door opmerkingen -->
-            {% if opmerkingen[student2] %} {% for comment in
-            opmerkingen[student2] %} {{comment}} {%endfor%} {%else%} / {%endif%}
+            {% if opmerkingen[student2] %}
+            <ul>
+              {% for comment in opmerkingen[student2] %}
+              <li>{{comment}}</li>
+              {%endfor%}
+            </ul>
+            {%else%} / {%endif%}
           </td>
           {%endif%} {%endfor%}
         </tr>

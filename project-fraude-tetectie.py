@@ -47,6 +47,7 @@ if path.is_dir():
             path = file
             pyfiles = list(file.glob("*.py"))
             if pyfiles:
+                student_files = []
                 for pyfile in pyfiles:
                     # Het voledige bestand
                     innerbestand = pyfile.read_text()
@@ -78,13 +79,12 @@ if path.is_dir():
                     # omzetten van tree naar een string om te kunnen vergelijken.
                     stripped_code = new_tree.code.strip("\n")
                     print(f"Striped code {stripped_code}")
+                    
+                    # Hier zetten we alle data in een niewe lijst per py file.
+                    student_files.append((innerbestand, commentVisitor.comments, spelfouten))
 
-                    # Alle uitkomsten in een dictionarie zetten voor te kunnen vergelijken
-                    filedict[file.name] = [
-                        stripped_code,  # Code zonder commentaren
-                        commentVisitor.comments,  # Alleen de commands
-                        spelfouten,  # Spelfouten in commentaar en strings
-                    ]
+                    # Alle py file zetten we in deze lijst zodat we deze later kunnen vergelijken met andere studenten
+                    filedict[file.name] = student_files
             else:
                 print("geen py file gevonden.")
     else:
@@ -118,19 +118,20 @@ for student1, content1 in anoniem_filedict.items():
             student1 < student2
         ):  # Zorgt ervoor dat we de studenten niet meerdere keren nakijken
             if student1 != student2:
-                if content1[0] == content2[0]:
-                    print(student1, content1[0], student2, content2[0])
-                    matrix[student1][student2].append("identieke Code")
-                    print(f"striped_code{content1[0]}")
-                if content1[1] == content2[1]:
-                    print(student1, content1[1], student2, content2[1])
-                    matrix[student1][student2].append("identieke commentaar")
-                if content1[2] and content2[2]:
-                    if content1[2] == content2[2]:
-                        print(student1, content1[2], student2, content2[2])
-                        matrix[student1][student2].append(
-                            f"Identieke spelfout: {content2[2]}"
-                        )
+                if len(content1) != len(content2): # We kijken hier na of er evenveel py files per student geupload zijn. als dit niet is geven we een error code. 
+                    matrix[student1][student2].append("Vergelijking niet mogelijk: geen geleik aantal py files")
+                
+                else: #Vergelijken van de bestanden als er wel genoeg bestanden zijn.
+                    for(code1, comments1, spelfouten1), (code2, comments2, spelfouten2) in zip(content1, content2):
+                        if code1 == code2:
+                            matrix[student1][student2].append("identieke Code")
+                        if comments1 == comments2:
+                            matrix[student1][student2].append("identieke commentaar")
+                        if spelfouten1 and spelfouten2:
+                            if spelfouten1 == spelfouten2:
+                                matrix[student1][student2].append(
+                                    f"Identieke spelfout: {spelfouten1}"
+                                )   
 
 print(matrix)
 
