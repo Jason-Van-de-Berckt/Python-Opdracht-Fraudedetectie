@@ -2,6 +2,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pathlib import Path
 import libcst as cst
 from spellchecker import SpellChecker
+import ast
 
 
 class CommentCollector(cst.CSTVisitor):
@@ -19,12 +20,6 @@ class LexionCollector(cst.CSTVisitor):
     def visit_SimpleString(self, node: cst.SimpleString):
         string_value = node.value.strip("\"'")
         self.strings.append(string_value)
-
-
-class CommentTransformer(cst.CSTTransformer):
-    def leave_Comment(self, original_node, updated_node):
-        return cst.RemoveFromParent()
-
 
 # We vragen een diractory path op om hier na te gaan naar fraude.
 directory = input("Geef het pad van de folder in: ")
@@ -54,6 +49,10 @@ if path.is_dir():
                     # inhoud van innerbestand parsen.
                     content = cst.parse_module(innerbestand)
 
+                    # Code aprsen met AST hierna weer omzetten naar gewone code.
+                    parsed_code = ast.parse(innerbestand)
+                    pycode = ast.unparse(parsed_code)
+
                     # Innderbestanden zoeken naar commentaar
                     commentVisitor = CommentCollector()
                     content.visit(commentVisitor)
@@ -73,15 +72,8 @@ if path.is_dir():
                                 spelfouten.append(woord)
                                 print(f"spelfouten {spelfouten}")
 
-                    # Commments uit syntaxboom filteren
-                    transformer = CommentTransformer()
-                    new_tree = content.visit(transformer)
-                    # omzetten van tree naar een string om te kunnen vergelijken.
-                    stripped_code = new_tree.code.strip("\n")
-                    print(f"Striped code {stripped_code}")
-                    
                     # Hier zetten we alle data in een niewe lijst per py file.
-                    student_files.append((innerbestand, commentVisitor.comments, spelfouten))
+                    student_files.append((pycode, commentVisitor.comments, spelfouten))
 
                     # Alle py file zetten we in deze lijst zodat we deze later kunnen vergelijken met andere studenten
                     filedict[file.name] = student_files
